@@ -8,71 +8,104 @@
         /* Hier beginnt das Design (CSS) */
         body {
             margin: 0;
-            height: 100vh; /* Nutzt die volle Höhe des Bildschirms */
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: center; /* Zentriert vertikal */
-            align-items: center; /* Zentriert horizontal */
-            background-color: #ffffff; /* Weißer Hintergrund */
-            font-family: 'Helvetica Neue', Arial, sans-serif; /* Moderne, schlichte Schrift */
-            overflow: hidden; /* Verhindert, dass man scrollen kann, wenn das Alpha unten ankommt */
+            justify-content: center;
+            align-items: center;
+            background-color: #ffffff;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            overflow: hidden; /* Wichtig: Verhindert Scrollbalken, wenn Zeichen an den Rand springen */
         }
 
         h1 {
-            font-size: 8rem; /* Riesengroß für die Symbole */
+            font-size: 8rem;
             margin: 0;
-            color: #1a1a1a; /* Fast schwarz */
-            letter-spacing: 5px; /* Etwas Abstand zwischen den Blöcken */
-            font-weight: 400; /* Nimmt etwas von der Dicke, wirkt moderner */
+            color: #1a1a1a;
+            letter-spacing: 5px;
+            font-weight: 400;
         }
 
-        /* Feinschliff für die hoch- und tiefgestellten Zeichen */
         sup {
-            font-size: 0.5em; /* Macht das hochgestellte Epsilon halb so groß */
+            font-size: 0.5em;
             vertical-align: super;
         }
 
         sub {
-            font-size: 0.5em; /* Macht das tiefgestellte Epsilon halb so groß */
+            font-size: 0.5em;
             vertical-align: sub;
         }
 
-        /* --- NEU: Das klickbare Alpha --- */
-        #alpha-zeichen {
-            display: inline-block; /* Wichtig, damit es sich unabhängig bewegen kann */
-            cursor: pointer; /* Macht den Mauszeiger zur Hand beim Drüberfahren */
-            /* Die Animation: Dauer 1 Sekunde. cubic-bezier simuliert die Schwerkraft (wird nach unten schneller) */
-            transition: transform 1s cubic-bezier(0.5, 0, 1, 1); 
+        /* --- Klickbare Eigenschaften für Alpha und Beta --- */
+        #alpha-zeichen, #beta-zeichen {
+            display: inline-block;
+            cursor: pointer;
+            /* Die Animation ist jetzt etwas schneller (0.6s) und gleichmäßiger (ease-out), was besser zum Springen passt */
+            transition: transform 0.6s ease-out; 
+        }
+
+        /* --- Eigenschaften für die Epsilons --- */
+        #epsilon-hoch, #epsilon-tief {
+            display: inline-block;
+            cursor: pointer;
+            transition: opacity 0.5s ease; 
         }
 
         p {
-            font-size: 1.5rem; /* Kleinere Schrift für Coming soon */
-            color: #888888; /* Helles Grau */
+            font-size: 1.5rem;
+            color: #888888;
             margin-top: 10px;
-            letter-spacing: 2px; /* Buchstaben etwas weiter auseinander */
-            text-transform: uppercase; /* Alles in Großbuchstaben */
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
     </style>
 </head>
 <body>
     
     <h1>
-        <span id="alpha-zeichen">α</span><sup>ε</sup>β<sub>ε</sub>
+        <span id="alpha-zeichen">α</span><sup id="epsilon-hoch">ε</sup><span id="beta-zeichen">β</span><sub id="epsilon-tief">ε</sub>
     </h1>
     <p>Coming soon</p>
 
     <script>
-        // 1. Wir suchen das Alpha-Zeichen auf der Seite anhand seines Namensschilds
-        const alpha = document.getElementById('alpha-zeichen');
-
-        // 2. Wir sagen ihm, was bei einem Klick ('click') passieren soll
-        alpha.addEventListener('click', function() {
-            // Wir berechnen den Abstand: Die gesamte Bildschirmhöhe MINUS der aktuellen Position des Alphas
-            const platzNachUnten = window.innerHeight - alpha.getBoundingClientRect().bottom;
+        // --- 1. Die Zufalls-Maschine ---
+        // Diese Funktion schnappt sich ein Zeichen und wirft es an einen zufälligen Ort
+        function bewegeZufaellig(element) {
+            // Math.random() erzeugt eine Zahl. Wir rechnen das so um, dass ein 
+            // Wert zwischen -40 und +40 herauskommt. 
+            // -40 bedeutet weit nach links/oben, +40 bedeutet weit nach rechts/unten.
+            const zufallX = (Math.random() * 80) - 40; 
+            const zufallY = (Math.random() * 80) - 40; 
             
-            // Wir schieben das Alpha exakt um diesen berechneten Wert nach unten (Y-Achse)
-            alpha.style.transform = `translateY(${platzNachUnten}px)`;
+            // vw = Viewport Width (Bildschirmbreite), vh = Viewport Height (Bildschirmhöhe)
+            element.style.transform = `translate(${zufallX}vw, ${zufallY}vh)`;
+        }
+
+        // --- 2. Alpha klickbar machen ---
+        const alpha = document.getElementById('alpha-zeichen');
+        alpha.addEventListener('click', function() {
+            // Ruft unsere Zufalls-Maschine für das Alpha auf
+            bewegeZufaellig(alpha);
         });
+
+        // --- 3. Beta klickbar machen ---
+        const beta = document.getElementById('beta-zeichen');
+        beta.addEventListener('click', function() {
+            // Ruft unsere Zufalls-Maschine für das Beta auf
+            bewegeZufaellig(beta);
+        });
+
+        // --- 4. Epsilons verschwinden lassen (wie bisher) ---
+        const epsilonHoch = document.getElementById('epsilon-hoch');
+        const epsilonTief = document.getElementById('epsilon-tief');
+
+        function unsichtbarMachen(element) {
+            element.style.opacity = '0'; 
+            element.style.pointerEvents = 'none'; 
+        }
+
+        epsilonHoch.addEventListener('click', function() { unsichtbarMachen(epsilonHoch); });
+        epsilonTief.addEventListener('click', function() { unsichtbarMachen(epsilonTief); });
     </script>
 
 </body>
