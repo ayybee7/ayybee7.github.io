@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>aebe</title>
+    <title>α^ε β_ε - Coming soon</title>
     <style>
         /* Hier beginnt das Design (CSS) */
         body {
@@ -15,13 +15,34 @@
             align-items: center; /* Zentriert horizontal */
             background-color: #ffffff; /* Weißer Hintergrund */
             font-family: 'Helvetica Neue', Arial, sans-serif; /* Moderne, schlichte Schrift */
+            overflow: hidden; /* Verhindert, dass man scrollen kann, wenn das Alpha unten ankommt */
         }
 
         h1 {
-            font-size: 6rem; /* Sehr große Schrift für aebe */
+            font-size: 8rem; /* Riesengroß für die Symbole */
             margin: 0;
             color: #1a1a1a; /* Fast schwarz */
-            letter-spacing: -2px; /* Buchstaben minimal enger zusammen */
+            letter-spacing: 5px; /* Etwas Abstand zwischen den Blöcken */
+            font-weight: 400; /* Nimmt etwas von der Dicke, wirkt moderner */
+        }
+
+        /* Feinschliff für die hoch- und tiefgestellten Zeichen */
+        sup {
+            font-size: 0.5em; /* Macht das hochgestellte Epsilon halb so groß */
+            vertical-align: super;
+        }
+
+        sub {
+            font-size: 0.5em; /* Macht das tiefgestellte Epsilon halb so groß */
+            vertical-align: sub;
+        }
+
+        /* --- NEU: Das klickbare Alpha --- */
+        #alpha-zeichen {
+            display: inline-block; /* Wichtig, damit es sich unabhängig bewegen kann */
+            cursor: pointer; /* Macht den Mauszeiger zur Hand beim Drüberfahren */
+            /* Die Animation: Dauer 1 Sekunde. cubic-bezier simuliert die Schwerkraft (wird nach unten schneller) */
+            transition: transform 1s cubic-bezier(0.5, 0, 1, 1); 
         }
 
         p {
@@ -35,8 +56,24 @@
 </head>
 <body>
     
-    <h1>α<sup>ε</sup>β<sub>ε</sub></h1>
+    <h1>
+        <span id="alpha-zeichen">α</span><sup>ε</sup>β<sub>ε</sub>
+    </h1>
     <p>Coming soon</p>
+
+    <script>
+        // 1. Wir suchen das Alpha-Zeichen auf der Seite anhand seines Namensschilds
+        const alpha = document.getElementById('alpha-zeichen');
+
+        // 2. Wir sagen ihm, was bei einem Klick ('click') passieren soll
+        alpha.addEventListener('click', function() {
+            // Wir berechnen den Abstand: Die gesamte Bildschirmhöhe MINUS der aktuellen Position des Alphas
+            const platzNachUnten = window.innerHeight - alpha.getBoundingClientRect().bottom;
+            
+            // Wir schieben das Alpha exakt um diesen berechneten Wert nach unten (Y-Achse)
+            alpha.style.transform = `translateY(${platzNachUnten}px)`;
+        });
+    </script>
 
 </body>
 </html>
