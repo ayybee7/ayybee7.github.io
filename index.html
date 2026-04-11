@@ -15,9 +15,40 @@
             align-items: center;
             background-color: #ffffff;
             font-family: 'Helvetica Neue', Arial, sans-serif;
-            overflow: hidden; /* Wichtig: Verhindert Scrollbalken, wenn Zeichen an den Rand springen */
+            overflow: hidden;
         }
 
+        /* --- Passwort Overlay Styling --- */
+        #password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; /* Liegt über allem */
+            transition: opacity 0.5s ease;
+        }
+
+        #password-overlay input {
+            padding: 10px;
+            font-size: 1.2rem;
+            border: 1px solid #1a1a1a;
+            border-radius: 5px;
+            text-align: center;
+            outline: none;
+        }
+
+        #password-overlay p {
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        /* --- Dein restliches Design --- */
         h1 {
             font-size: 8rem;
             margin: 0;
@@ -26,32 +57,22 @@
             font-weight: 400;
         }
 
-        sup {
-            font-size: 0.5em;
-            vertical-align: super;
-        }
+        sup { font-size: 0.5em; vertical-align: super; }
+        sub { font-size: 0.5em; vertical-align: sub; }
 
-        sub {
-            font-size: 0.5em;
-            vertical-align: sub;
-        }
-
-        /* --- Klickbare Eigenschaften für Alpha und Beta --- */
         #alpha-zeichen, #beta-zeichen {
             display: inline-block;
             cursor: pointer;
-            /* Die Animation ist jetzt etwas schneller (0.6s) und gleichmäßiger (ease-out), was besser zum Springen passt */
             transition: transform 0.6s ease-out; 
         }
 
-        /* --- Eigenschaften für die Epsilons --- */
         #epsilon-hoch, #epsilon-tief {
             display: inline-block;
             cursor: pointer;
             transition: opacity 0.5s ease; 
         }
 
-        p {
+        .main-text {
             font-size: 1.5rem;
             color: #888888;
             margin-top: 10px;
@@ -61,41 +82,53 @@
     </style>
 </head>
 <body>
-    
+
+    <div id="password-overlay">
+        <p>Bitte Passwort eingeben</p>
+        <input type="password" id="password-input" placeholder="Passwort..." autofocus>
+    </div>
+
     <h1>
         <span id="alpha-zeichen">α</span><sup id="epsilon-hoch">ε</sup><span id="beta-zeichen">β</span><sub id="epsilon-tief">ε</sub>
     </h1>
-    <p>Coming soon</p>
+    <p class="main-text">Coming soon</p>
 
     <script>
-        // --- 1. Die Zufalls-Maschine ---
-        // Diese Funktion schnappt sich ein Zeichen und wirft es an einen zufälligen Ort
+        // --- 1. Passwort Logik ---
+        const passwortOverlay = document.getElementById('password-overlay');
+        const passwortInput = document.getElementById('password-input');
+        
+        // HIER dein Passwort festlegen:
+        const RICHTIGES_PASSWORT = "DeinGeheimnis123"; 
+
+        passwortInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                if (passwortInput.value === RICHTIGES_PASSWORT) {
+                    // Overlay ausblenden
+                    passwortOverlay.style.opacity = '0';
+                    setTimeout(() => {
+                        passwortOverlay.style.display = 'none';
+                    }, 500);
+                } else {
+                    alert("Falsches Passwort!");
+                    passwortInput.value = "";
+                }
+            }
+        });
+
+        // --- 2. Deine bestehenden Funktionen ---
         function bewegeZufaellig(element) {
-            // Math.random() erzeugt eine Zahl. Wir rechnen das so um, dass ein 
-            // Wert zwischen -40 und +40 herauskommt. 
-            // -40 bedeutet weit nach links/oben, +40 bedeutet weit nach rechts/unten.
             const zufallX = (Math.random() * 80) - 40; 
             const zufallY = (Math.random() * 80) - 40; 
-            
-            // vw = Viewport Width (Bildschirmbreite), vh = Viewport Height (Bildschirmhöhe)
             element.style.transform = `translate(${zufallX}vw, ${zufallY}vh)`;
         }
 
-        // --- 2. Alpha klickbar machen ---
         const alpha = document.getElementById('alpha-zeichen');
-        alpha.addEventListener('click', function() {
-            // Ruft unsere Zufalls-Maschine für das Alpha auf
-            bewegeZufaellig(alpha);
-        });
+        alpha.addEventListener('click', function() { bewegeZufaellig(alpha); });
 
-        // --- 3. Beta klickbar machen ---
         const beta = document.getElementById('beta-zeichen');
-        beta.addEventListener('click', function() {
-            // Ruft unsere Zufalls-Maschine für das Beta auf
-            bewegeZufaellig(beta);
-        });
+        beta.addEventListener('click', function() { bewegeZufaellig(beta); });
 
-        // --- 4. Epsilons verschwinden lassen (wie bisher) ---
         const epsilonHoch = document.getElementById('epsilon-hoch');
         const epsilonTief = document.getElementById('epsilon-tief');
 
