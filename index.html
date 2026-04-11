@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>αebe - Coming soon</title>
+    <title>αebe - Welcome</title>
     <style>
-        /* Hier beginnt das Design (CSS) */
         body {
             margin: 0;
             height: 100vh;
@@ -18,37 +17,6 @@
             overflow: hidden;
         }
 
-        /* --- Passwort Overlay Styling --- */
-        #password-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000; /* Liegt über allem */
-            transition: opacity 0.5s ease;
-        }
-
-        #password-overlay input {
-            padding: 10px;
-            font-size: 1.2rem;
-            border: 1px solid #1a1a1a;
-            border-radius: 5px;
-            text-align: center;
-            outline: none;
-        }
-
-        #password-overlay p {
-            font-size: 1rem;
-            margin-bottom: 20px;
-        }
-
-        /* --- Dein restliches Design --- */
         h1 {
             font-size: 8rem;
             margin: 0;
@@ -72,51 +40,64 @@
             transition: opacity 0.5s ease; 
         }
 
-        .main-text {
+        p {
             font-size: 1.5rem;
             color: #888888;
             margin-top: 10px;
             letter-spacing: 2px;
             text-transform: uppercase;
         }
+
+        /* --- Passwort Feld Styling --- */
+        .pw-container {
+            margin-top: 30px;
+        }
+
+        #pw-input {
+            border: none;
+            border-bottom: 1px solid #ccc;
+            padding: 10px;
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+            color: #1a1a1a;
+            transition: border-color 0.3s;
+        }
+
+        #pw-input:focus {
+            border-bottom: 1px solid #1a1a1a;
+        }
     </style>
 </head>
 <body>
-
-    <div id="password-overlay">
-        <p>Bitte Passwort eingeben</p>
-        <input type="password" id="password-input" placeholder="Passwort..." autofocus>
-    </div>
-
+    
     <h1>
         <span id="alpha-zeichen">α</span><sup id="epsilon-hoch">ε</sup><span id="beta-zeichen">β</span><sub id="epsilon-tief">ε</sub>
     </h1>
-    <p class="main-text">Coming soon</p>
+    <p>Coming soon</p>
+
+    <div class="pw-container">
+        <input type="password" id="pw-input" placeholder="Passwort eingeben...">
+    </div>
 
     <script>
-        // --- 1. Passwort Logik ---
-        const passwortOverlay = document.getElementById('password-overlay');
-        const passwortInput = document.getElementById('password-input');
-        
-        // HIER dein Passwort festlegen:
-        const RICHTIGES_PASSWORT = "DeinGeheimnis123"; 
+        // --- Passwort Logik ---
+        const pwInput = document.getElementById('pw-input');
+        const GEHEIMNIS = "aebe11"; // Hier dein Passwort ändern!
 
-        passwortInput.addEventListener('keypress', function (e) {
+        pwInput.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
-                if (passwortInput.value === RICHTIGES_PASSWORT) {
-                    // Overlay ausblenden
-                    passwortOverlay.style.opacity = '0';
-                    setTimeout(() => {
-                        passwortOverlay.style.display = 'none';
-                    }, 500);
+                if (pwInput.value === GEHEIMNIS) {
+                    // Weiterleitung zur neuen Seite
+                    window.location.href = "stay-tuned.html";
                 } else {
-                    alert("Falsches Passwort!");
-                    passwortInput.value = "";
+                    alert("Versuch es nochmal.");
+                    pwInput.value = "";
                 }
             }
         });
 
-        // --- 2. Deine bestehenden Funktionen ---
+        // --- Deine Animationen ---
         function bewegeZufaellig(element) {
             const zufallX = (Math.random() * 80) - 40; 
             const zufallY = (Math.random() * 80) - 40; 
