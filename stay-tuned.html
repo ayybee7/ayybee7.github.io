@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>αebe - Stay Tuned</title>
+    <title>αebe - σταυ τυνεδ</title>
     <style>
         body {
             margin: 0;
@@ -11,18 +11,31 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #1a1a1a; /* Hintergrund hier mal schwarz für Kontrast */
-            color: #ffffff;
+            background-color: #ffffff;
             font-family: 'Helvetica Neue', Arial, sans-serif;
+            color: #1a1a1a;
+            overflow: hidden;
         }
-        h1 {
+
+        .greek-text {
             font-size: 3rem;
-            letter-spacing: 10px;
-            text-transform: uppercase;
+            letter-spacing: 5px;
+            font-weight: 300;
+            /* Ein sanftes Einblenden beim Laden */
+            animation: fadeIn 2s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
 <body>
-    <h1>Stay Tuned</h1>
+
+    <div class="greek-text">
+        sταγ τυηεδ
+    </div>
+
 </body>
 </html>
